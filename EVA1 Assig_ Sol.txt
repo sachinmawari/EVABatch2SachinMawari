@@ -1,0 +1,140 @@
+Que. Why should we (nearly) always use 3x3 kernels?
+
+Ans.
+In image processing, a kernel, convolution matrix, or mask is a small matrix. 
+It is used for blurring, sharpening, embossing, edge detection, and more. This is accomplished by doing a convolution between a kernel and an image.
+A convolution filter passes over all the pixels of the image in such a manner that, at a given time, we take 'dot product' of the convolution filter 
+and the image pixels to get one final value output. We do this hoping that the weights (or values) in the convolution filter, 
+when multiplied with corresponding image pixels, gives us a value that best represents those image pixels. 
+We can think of each convolution filter as extracting some kind of feature from the image.
+
+First we have to choose if a filter size should be small or large.
+
+The advantages of using a smaller filter over a larger one are:
+1. The features that would be extracted will be highly local and may not have a more general overview of the image. This helps capture smaller, complex features in the image. 
+2. The amount of information or features extracted will be vast, which can be further useful in later layers.
+3. We have better weight sharing due to the smaller convolution size that is applied on the complete image. 
+
+
+Now we can choose between an odd number filters & an even size filters:
+odd filters are preferable over even filters because if we were to consider the final output pixel (of next layer) that was obtained by convolving on the previous layer pixels, all the previous layer pixels would be symmetrically around the output pixel.
+Without this symmetry, we will have to account for distortions across the layers. This will happen due to the usage of an even sized kernel.
+Therefore, even sized kernel filters aren’t preferred.
+
+Now we can compare the smallest odd sized filters i.e, 1x1 , 3x3 & 5x5 filters
+
+1. With smaller kernel sizes, we get lower number of weights and more number of layers. 
+2. Due to the lower number of weights, this is computationally efficient. 
+3. Due to the larger number of layers, it learns complex, more non-linear features.
+4. With more number of layers, it will have to keep each of those layers in the memory to perform backpropogation.
+   This necessitates the need for larger storage memory. 
+
+Thus we can use filter size as small as possible. Thus we can eliminate 5x5 filter, leaving us with either 1x1 filter or a 3x3 filter as the preferred choice.
+
+Now the 1X1 can be eliminated from the list as the features extracted from it would be fine grained and local, with no consideration for the neighboring pixels.
+Hence, 3X3 works in most cases, and it often is the popular choice.
+
+
+
+Que. How many times to we need to perform 3x3 convolutions operations to reach close to 1x1 from 199x199 (type each layer output like 199x199 > 197x197...)
+Ans. 99 Times.
+We can see in the Step By Step illustration below how a 3x3 convolution affects converts the provided input.
+1st Time	3x3 Convolution on 199X199 input Gives	an Output of 197X197	
+2nd Time	3x3 Convolution on 197X197 input Gives	an Output of 195X195	
+3rd Time	3x3 Convolution on 195X195 input Gives	an Output of 193X193	
+4th Time	3x3 Convolution on 193X193 input Gives	an Output of 191X191	
+5th Time	3x3 Convolution on 191X191 input Gives	an Output of 189X189	
+6th Time	3x3 Convolution on 189X189 input Gives	an Output of 187X187	
+7th Time	3x3 Convolution on 187X187 input Gives	an Output of 185X185	
+8th Time	3x3 Convolution on 185X185 input Gives	an Output of 183X183	
+9th Time	3x3 Convolution on 183X183 input Gives	an Output of 181X181	
+10th Time	3x3 Convolution on 181X181 input Gives	an Output of 179X179	
+11th Time	3x3 Convolution on 179X179 input Gives	an Output of 177X177	
+12th Time	3x3 Convolution on 177X177 input Gives	an Output of 175X175	
+13th Time	3x3 Convolution on 175X175 input Gives	an Output of 173X173	
+14th Time	3x3 Convolution on 173X173 input Gives	an Output of 171X171	
+15th Time	3x3 Convolution on 171X171 input Gives	an Output of 169X169	
+16th Time	3x3 Convolution on 169X169 input Gives	an Output of 167X167	
+17th Time	3x3 Convolution on 167X167 input Gives	an Output of 165X165	
+18th Time	3x3 Convolution on 165X165 input Gives	an Output of 163X163	
+19th Time	3x3 Convolution on 163X163 input Gives	an Output of 161X161	
+20th Time	3x3 Convolution on 161X161 input Gives	an Output of 159X159	
+21st Time	3x3 Convolution on 159X159 input Gives	an Output of 157X157	
+22nd Time	3x3 Convolution on 157X157 input Gives	an Output of 155X155	
+23rd Time	3x3 Convolution on 155X155 input Gives	an Output of 153X153	
+24th Time	3x3 Convolution on 153X153 input Gives	an Output of 151X151	
+25th Time	3x3 Convolution on 151X151 input Gives	an Output of 149X149	
+26th Time	3x3 Convolution on 149X149 input Gives	an Output of 147X147	
+27th Time	3x3 Convolution on 147X147 input Gives	an Output of 145X145	
+28th Time	3x3 Convolution on 145X145 input Gives	an Output of 143X143	
+29th Time	3x3 Convolution on 143X143 input Gives	an Output of 141X141	
+30th Time	3x3 Convolution on 141X141 input Gives	an Output of 139X139	
+31st Time	3x3 Convolution on 139X139 input Gives	an Output of 137X137	
+32nd Time	3x3 Convolution on 137X137 input Gives	an Output of 135X135	
+33rd Time	3x3 Convolution on 135X135 input Gives	an Output of 133X133	
+34th Time	3x3 Convolution on 133X133 input Gives	an Output of 131X131	
+35th Time	3x3 Convolution on 131X131 input Gives	an Output of 129X129	
+36th Time	3x3 Convolution on 129X129 input Gives	an Output of 127X127	
+37th Time	3x3 Convolution on 127X127 input Gives	an Output of 125X125	
+38th Time	3x3 Convolution on 125X125 input Gives	an Output of 123X123	
+39th Time	3x3 Convolution on 123X123 input Gives	an Output of 121X121	
+40th Time	3x3 Convolution on 121X121 input Gives	an Output of 119X119	
+41st Time	3x3 Convolution on 119X119 input Gives	an Output of 117X117	
+42nd Time	3x3 Convolution on 117X117 input Gives	an Output of 115X115	
+43rd Time	3x3 Convolution on 115X115 input Gives	an Output of 113X113	
+44th Time	3x3 Convolution on 113X113 input Gives	an Output of 111X111	
+45th Time	3x3 Convolution on 111X111 input Gives	an Output of 109X109	
+46th Time	3x3 Convolution on 109X109 input Gives	an Output of 107X107	
+47th Time	3x3 Convolution on 107X107 input Gives	an Output of 105X105	
+48th Time	3x3 Convolution on 105X105 input Gives	an Output of 103X103	
+49th Time	3x3 Convolution on 103X103 input Gives	an Output of 101X101	
+50th Time	3x3 Convolution on 101X101 input Gives	an Output of 99X99	
+51st Time	3x3 Convolution on 99X99 input Gives	an Output of 97X97	
+52nd Time	3x3 Convolution on 97X97 input Gives	an Output of 95X95	
+53rd Time	3x3 Convolution on 95X95 input Gives	an Output of 93X93	
+54th Time	3x3 Convolution on 93X93 input Gives	an Output of 91X91	
+55th Time	3x3 Convolution on 91X91 input Gives	an Output of 89X89	
+56th Time	3x3 Convolution on 89X89 input Gives	an Output of 87X87	
+57th Time	3x3 Convolution on 87X87 input Gives	an Output of 85X85	
+58th Time	3x3 Convolution on 85X85 input Gives	an Output of 83X83	
+59th Time	3x3 Convolution on 83X83 input Gives	an Output of 81X81	
+60th Time	3x3 Convolution on 81X81 input Gives	an Output of 79X79	
+61st Time	3x3 Convolution on 79X79 input Gives	an Output of 77X77	
+62nd Time	3x3 Convolution on 77X77 input Gives	an Output of 75X75	
+63rd Time	3x3 Convolution on 75X75 input Gives	an Output of 73X73	
+64th Time	3x3 Convolution on 73X73 input Gives	an Output of 71X71	
+65th Time	3x3 Convolution on 71X71 input Gives	an Output of 69X69	
+66th Time	3x3 Convolution on 69X69 input Gives	an Output of 67X67	
+67th Time	3x3 Convolution on 67X67 input Gives	an Output of 65X65	
+68th Time	3x3 Convolution on 65X65 input Gives	an Output of 63X63	
+69th Time	3x3 Convolution on 63X63 input Gives	an Output of 61X61	
+70th Time	3x3 Convolution on 61X61 input Gives	an Output of 59X59	
+71st Time	3x3 Convolution on 59X59 input Gives	an Output of 57X57	
+72nd Time	3x3 Convolution on 57X57 input Gives	an Output of 55X55	
+73rd Time	3x3 Convolution on 55X55 input Gives	an Output of 53X53	
+74th Time	3x3 Convolution on 53X53 input Gives	an Output of 51X51	
+75th Time	3x3 Convolution on 51X51 input Gives	an Output of 49X49	
+76th Time	3x3 Convolution on 49X49 input Gives	an Output of 47X47	
+77th Time	3x3 Convolution on 47X47 input Gives	an Output of 45X45	
+78th Time	3x3 Convolution on 45X45 input Gives	an Output of 43X43	
+79th Time	3x3 Convolution on 43X43 input Gives	an Output of 41X41	
+80th Time	3x3 Convolution on 41X41 input Gives	an Output of 39X39	
+81st Time	3x3 Convolution on 39X39 input Gives	an Output of 37X37	
+82nd Time	3x3 Convolution on 37X37 input Gives	an Output of 35X35	
+83rd Time	3x3 Convolution on 35X35 input Gives	an Output of 33X33	
+84th Time	3x3 Convolution on 33X33 input Gives	an Output of 31X31	
+85th Time	3x3 Convolution on 31X31 input Gives	an Output of 29X29	
+86th Time	3x3 Convolution on 29X29 input Gives	an Output of 27X27	
+87th Time	3x3 Convolution on 27X27 input Gives	an Output of 25X25	
+88th Time	3x3 Convolution on 25X25 input Gives	an Output of 23X23	
+89th Time	3x3 Convolution on 23X23 input Gives	an Output of 21X21	
+90th Time	3x3 Convolution on 21X21 input Gives	an Output of 19X19	
+91st Time	3x3 Convolution on 19X19 input Gives	an Output of 17X17	
+92nd Time	3x3 Convolution on 17X17 input Gives	an Output of 15X15	
+93rd Time	3x3 Convolution on 15X15 input Gives	an Output of 13X13	
+94th Time	3x3 Convolution on 13X13 input Gives	an Output of 11X11	
+95th Time	3x3 Convolution on 11X11 input Gives	an Output of 9X9
+96th Time	3x3 Convolution on 9X9 input Gives	an Output of 7X7
+97th Time	3x3 Convolution on 7X7 input Gives	an Output of 5X5
+98th Time	3x3 Convolution on 5X5 input Gives	an Output of 3X3
+99th Time	3x3 Convolution on 3X3 input Gives	an Output of 1X1        
